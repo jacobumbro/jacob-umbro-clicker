@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jacob Umbro Clicker</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:
+    radial-gradient(circle at top,#2b2b2b,#111);
+    color:white;
+    overflow-x:hidden;
+}
+
+/* HEADER */
+
+header{
+    text-align:center;
+    padding:20px;
+}
+
+h1{
+    font-size:58px;
+    margin:0;
+    color:#00ffcc;
+    text-shadow:
+    0 0 10px #00ffcc,
+    0 0 25px #00ffcc,
+    0 0 40px #00ffcc;
+}
+
+#juCounter{
+    font-size:50px;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+#stats{
+    font-size:22px;
+    margin-top:12px;
+    color:#ddd;
+    line-height:1.6;
+}
+
+/* GAME AREA */
+
+.mainGame{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:45px;
+    flex-wrap:wrap;
+    margin-top:20px;
+    padding:20px;
+}
+
+/* FACE AREA */
+
+#faceContainer{
+    position:relative;
+    width:390px;
+    height:390px;
+}
+
+#faceGlow{
+    position:absolute;
+    inset:-20px;
+    background:#00ffcc33;
+    filter:blur(50px);
+    border-radius:50%;
+    z-index:0;
+}
+
+#face{
+    position:relative;
+    z-index:1;
+    width:100%;
+    border-radius:25px;
+    cursor:pointer;
+    user-select:none;
+
+    box-shadow:
+    0 0 30px rgba(255,255,255,0.3);
+
+    transition:
+    transform 0.08s,
+    filter 0.2s;
+}
+
+#face:hover{
+    filter:brightness(1.08);
+}
+
+#face:active{
+    transform:scale(0.94);
+}
+
+/* POPPING FACES */
+
+.popFace{
+    position:absolute;
+    width:85px;
+    pointer-events:none;
+    animation:explode 1s forwards;
+    z-index:2;
+}
+
+@keyframes explode{
+
+    0%{
+        transform:
+        translate(0px,0px)
+        scale(0.2)
+        rotate(0deg);
+
+        opacity:1;
+    }
+
+    100%{
+
+        transform:
+        translate(
+        calc(var(--x) * 1px),
+        calc(var(--y) * 1px))
+        scale(1)
+        rotate(360deg);
+
+        opacity:0;
+    }
+}
+
+/* SHOP */
+
+.shop{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.upgrade{
+    background:
+    linear-gradient(to bottom,#333,#222);
+
+    border:2px solid #00ffcc;
+
+    border-radius:18px;
+
+    width:320px;
+
+    padding:18px;
+
+    box-shadow:
+    0 0 20px rgba(0,255,204,0.15);
+}
+
+.upgrade h2{
+    margin-top:0;
+    color:#00ffcc;
+}
+
+button{
+    width:100%;
+    background:#00ffcc;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.15s;
+}
+
+button:hover{
+    background:#00ddb3;
+    transform:scale(1.03);
+}
+
+button:active{
+    transform:scale(0.96);
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:100px;
+    background:#0c0c0c;
+    padding:45px;
+    text-align:center;
+    border-top:2px solid #00ffcc;
+}
+
+footer a{
+    color:#00ffcc;
+    font-size:22px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Jacob Umbro Clicker</h1>
+
+<div id="juCounter">JU: 0</div>
+
+<div id="stats">
+
+JU Per Click:
+<span id="clickPower">1</span>
+
+<br>
+
+Auto Click Speed:
+<span id="autoSpeed">0</span>/sec
+
+</div>
+
+</header>
+
+<div class="mainGame">
+
+    <!-- FACE -->
+
+    <div id="faceContainer">
+
+        <div id="faceGlow"></div>
+
+        <img
+        id="face"
+        src="https://i.ibb.co/Fqy180Pc/1000005176.png"
+        alt="Jacob Umbro Face">
+
+    </div>
+
+    <!-- SHOP -->
+
+    <div class="shop">
+
+        <div class="upgrade">
+
+            <h2>🔥 Better Clicks</h2>
+
+            <p>
+                Adds +1 JU every click
+            </p>
+
+            <p>
+                Cost:
+                <span id="clickCost">10</span>
+                JU
+            </p>
+
+            <button onclick="buyClickUpgrade()">
+                Buy Upgrade
+            </button>
+
+        </div>
+
+        <div class="upgrade">
+
+            <h2>⚡ Auto Clicker</h2>
+
+            <p>
+                Makes the face click faster automatically
+            </p>
+
+            <p>
+                Cost:
+                <span id="autoCost">15</span>
+                JU
+            </p>
+
+            <button onclick="buyAutoUpgrade()">
+                Buy Auto Clicker
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+
+<p>
+This game was made by Jacob Umbro
+</p>
+
+<p>
+
+Subscribe to my YouTube channel:
+
+<br><br>
+
+<a
+href="https://youtube.com/@gamingandmore-d9z?si=imnZk0qYY5jQF-Da"
+target="_blank">
+
+Gaming And More
+
+</a>
+
+</p>
+
+</footer>
+
+<script>
+
+/* FACE STAGES */
+
+const faceStages = [
+
+{
+amount:0,
+img:"https://i.ibb.co/Fqy180Pc/1000005176.png"
+},
+
+{
+amount:1000,
+img:"https://i.ibb.co/WNzxmZPL/image.png"
+},
+
+{
+amount:10000,
+img:"https://i.ibb.co/SX1M2rYL/image.png"
+},
+
+{
+amount:20000,
+img:"https://i.ibb.co/S7vqcS8z/image.png"
+},
+
+{
+amount:30000,
+img:"https://i.ibb.co/prhpnKZb/image.png"
+}
+
+];
+
+/* GAME VALUES */
+
+let ju = 0;
+
+let juPerClick = 1;
+
+let autoClickers = 0;
+
+let clickUpgradeCost = 10;
+
+let autoUpgradeCost = 15;
+
+/*
+Auto click speed
+starts slow then
+gets faster and faster
+*/
+
+let autoInterval = 1000;
+
+const face =
+document.getElementById("face");
+
+const faceContainer =
+document.getElementById("faceContainer");
+
+/* CLICK SOUND */
+
+function playClickSound(){
+
+const audio =
+new Audio(
+"https://actions.google.com/sounds/v1/cartoon/pop.ogg"
+);
+
+audio.volume = 0.11;
+
+audio.play();
+}
+
+/* FACE EVOLUTION */
+
+function updateFace(){
+
+let current =
+faceStages[0].img;
+
+for(let stage of faceStages){
+
+if(ju >= stage.amount){
+
+current = stage.img;
+}
+}
+
+face.src = current;
+}
+
+/* POPPING FACE EFFECT */
+
+function createPopFace(){
+
+const img =
+document.createElement("img");
+
+img.src = face.src;
+
+img.className = "popFace";
+
+img.style.left = "150px";
+
+img.style.top = "150px";
+
+img.style.setProperty(
+"--x",
+Math.random() * 500 - 250
+);
+
+img.style.setProperty(
+"--y",
+Math.random() * 400 - 200
+);
+
+faceContainer.appendChild(img);
+
+setTimeout(() => {
+
+img.remove();
+
+},1000);
+}
+
+/* MAIN CLICK */
+
+function clickFace(){
+
+ju += juPerClick;
+
+updateEverything();
+
+playClickSound();
+
+/* spawn pop faces */
+
+for(let i=0;i<5;i++){
+
+createPopFace();
+}
+}
+
+face.addEventListener("click", clickFace);
+
+/* UPDATE DISPLAY */
+
+function updateEverything(){
+
+document.getElementById(
+"juCounter"
+).innerText =
+"JU: " + Math.floor(ju);
+
+document.getElementById(
+"clickPower"
+).innerText =
+juPerClick;
+
+document.getElementById(
+"autoSpeed"
+).innerText =
+(
+1000 / autoInterval
+).toFixed(1);
+
+document.getElementById(
+"clickCost"
+).innerText =
+clickUpgradeCost;
+
+document.getElementById(
+"autoCost"
+).innerText =
+autoUpgradeCost;
+
+updateFace();
+}
+
+/* BETTER CLICKS */
+
+function buyClickUpgrade(){
+
+if(ju >= clickUpgradeCost){
+
+ju -= clickUpgradeCost;
+
+juPerClick++;
+
+clickUpgradeCost =
+Math.floor(
+clickUpgradeCost * 1.6
+);
+
+updateEverything();
+}
+}
+
+/* AUTO CLICKER */
+
+function updateAutoClicker(){
+
+clearInterval(window.autoLoop);
+
+window.autoLoop =
+setInterval(() => {
+
+if(autoClickers > 0){
+
+/*
+This fully clicks the face,
+including:
+- sound
+- pop faces
+- JU gain
+*/
+
+clickFace();
+}
+
+}, autoInterval);
+}
+
+/* BUY AUTO CLICKER */
+
+function buyAutoUpgrade(){
+
+if(ju >= autoUpgradeCost){
+
+ju -= autoUpgradeCost;
+
+/*
+Makes clicks faster
+like Capybara Clicker
+*/
+
+if(autoInterval > 45){
+
+autoInterval *= 0.85;
+}
+
+/* level counter */
+
+autoClickers++;
+
+autoUpgradeCost =
+Math.floor(
+autoUpgradeCost * 1.35
+);
+
+updateEverything();
+
+updateAutoClicker();
+}
+}
+
+/* START */
+
+updateEverything();
+
+updateAutoClicker();
+
+</script>
+
+</body>
+</html>
